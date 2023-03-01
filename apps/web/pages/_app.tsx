@@ -1,11 +1,16 @@
 import type { AppProps } from "next/app";
+import { QueryClient, QueryClientProvider } from "react-query";
 import { RecoilRoot } from "recoil";
+
+const queryClient = new QueryClient();
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   return (
-    <RecoilRoot>
-      <Component {...pageProps} />
-    </RecoilRoot>
+    <QueryClientProvider client={queryClient}>
+      <RecoilRoot>
+        <Component {...pageProps} />
+      </RecoilRoot>
+    </QueryClientProvider>
   );
 };
 
