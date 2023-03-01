@@ -8,7 +8,7 @@ const Component = styled.div`
 export default function Web() {
   return (
     <div>
-      <h1>Web</h1>
+      <h1 role="heading">Web</h1>
       <Component>Web</Component>
       <Button />
     </div>
