@@ -2,8 +2,6 @@ import { CacheModule, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { User } from './users/entity/users.entity';
-import { UsersModule } from './users/users.module';
 import * as redisStore from 'cache-manager-ioredis';
 
 @Module({
@@ -20,10 +18,9 @@ import * as redisStore from 'cache-manager-ioredis';
       username: 'root',
       password: 'root',
       database: 'test',
-      entities: [User],
+      autoLoadEntities: true,
       synchronize: true,
     }),
-    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
