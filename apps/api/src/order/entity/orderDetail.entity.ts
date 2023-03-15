@@ -3,19 +3,19 @@ import {
   Column,
   Entity,
   JoinTable,
-  ManyToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
 @Entity()
-export class Categories {
+export class OrderDetail {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  name: string;
-
-  @ManyToMany((type) => Merchandise)
+  @OneToOne((type) => Merchandise)
   @JoinTable()
-  merchandises: Merchandise[];
+  merchandises: Merchandise;
+
+  @Column()
+  quantity: number;
 }

@@ -1,10 +1,13 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { Order } from './order.entity';
-
-enum Status {
-  WAITING,
-  DONE,
-}
+import { User } from 'src/users/entity/user.entity';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { OrderDetail } from './orderDetail.entity';
 
 @Entity()
 export class Orders {
@@ -12,11 +15,12 @@ export class Orders {
   id: number;
 
   @Column()
-  @OneToMany((type) => Order, (order) => order.id)
-  orders: number[];
+  @ManyToOne((type) => User, (user) => user.id)
+  userId: number;
 
-  @Column()
-  status: Status;
+  @OneToMany((type) => OrderDetail, (orderDetail) => orderDetail.id)
+  @JoinTable()
+  orders: number[];
 
   @Column()
   createdAt: Date;

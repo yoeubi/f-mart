@@ -1,5 +1,11 @@
 import { Orders } from 'src/order/entity/orders.entity';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class User {
@@ -15,18 +21,9 @@ export class User {
   @Column()
   isActive: boolean;
 
-  @Column()
-  refreshToken: string;
-
-  @Column()
-  @OneToMany((type) => Orders, (orders) => orders.id)
-  ordersIds: number[];
-
-  //   @Column()
-  //   role: string;
-
-  //   @Column()
-  //   address: string;
+  @OneToMany((type) => Orders, (orders) => orders)
+  @JoinTable()
+  orders: Orders[];
 
   @Column()
   createdAt: Date;

@@ -3,6 +3,7 @@ import { User } from 'src/users/entity/user.entity';
 import {
   Column,
   Entity,
+  JoinTable,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -20,9 +21,9 @@ export class Store {
   @Column()
   name: string;
 
-  @Column()
-  @OneToMany((type) => Merchandise, (merchandise) => merchandise.id)
-  merchandises: number[];
+  @OneToMany((type) => Merchandise, (merchandise) => merchandise)
+  @JoinTable()
+  merchandises: Merchandise[];
 
   @Column()
   createdAt: Date;
