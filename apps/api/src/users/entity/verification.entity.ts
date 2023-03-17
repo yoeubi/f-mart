@@ -1,17 +1,21 @@
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { User } from './user.entity';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class Verification {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToOne((type) => User, (user) => user.id)
+  @Column()
   userId: number;
 
   @Column()
   code: string;
 
-  @Column()
+  @CreateDateColumn()
   expiredAt: Date;
 }
