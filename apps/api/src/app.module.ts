@@ -2,6 +2,7 @@ import { CacheModule, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AuthModule } from './auth/auth.module';
 import * as redisStore from 'cache-manager-ioredis';
 
 @Module({
@@ -21,6 +22,7 @@ import * as redisStore from 'cache-manager-ioredis';
       autoLoadEntities: true,
       synchronize: true,
     }),
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
