@@ -4,6 +4,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import * as redisStore from 'cache-manager-ioredis';
+import { User } from './users/entity/user.entity';
 
 @Module({
   imports: [
@@ -19,7 +20,7 @@ import * as redisStore from 'cache-manager-ioredis';
       username: 'root',
       password: 'root',
       database: 'test',
-      autoLoadEntities: true,
+      entities: [User],
       synchronize: true,
     }),
     AuthModule,

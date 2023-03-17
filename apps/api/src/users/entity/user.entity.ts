@@ -1,6 +1,7 @@
 import { Orders } from 'src/order/entity/orders.entity';
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinTable,
   OneToMany,
@@ -21,10 +22,10 @@ export class User {
   @Column()
   isActive: boolean;
 
-  @OneToMany((type) => Orders, (orders) => orders)
-  @JoinTable()
-  orders: Orders[];
+  // @OneToMany((type) => Orders, (orders) => orders)
+  // @JoinTable()
+  // orders: Orders[];
 
-  @Column()
+  @CreateDateColumn()
   createdAt: Date;
 }
