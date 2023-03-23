@@ -1,3 +1,5 @@
+import { FormEvent } from "react";
+import { fetchSignIn } from "../apis";
 import Button from "../components/Button";
 import Center from "../components/Center";
 import Form from "../components/Form";
@@ -5,13 +7,29 @@ import Input from "../components/Input";
 import Title from "../components/Title";
 
 const SignIn = () => {
+  const onSubmit = async (
+    e: FormEvent<HTMLFormElement> & {
+      target: {
+        email: HTMLInputElement;
+        password: HTMLInputElement;
+      };
+    }
+  ) => {
+    const { accessToken, refreshToken } = await fetchSignIn({
+      email: e.target.email.value,
+      password: e.target.password.value,
+    });
+    localStorage.setItem("accessToken", JSON.stringify(accessToken));
+    localStorage.setItem("refreshToken", JSON.stringify(refreshToken));
+  };
   return (
     <Center>
-      <Form>
+      <Form onSubmit={onSubmit}>
         <Title>로그인</Title>
         <Input
-          placeholder="아이디"
-          message={{ error: "아이디를 입력해주세요." }}
+          name="email"
+          placeholder="이메일"
+          message={{ error: "이메일를 입력해주세요." }}
         />
         <Input
           type="password"
