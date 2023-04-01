@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { ButtonHTMLAttributes } from "react";
+import { ButtonHTMLAttributes, ComponentPropsWithoutRef, FC } from "react";
 
 const PureButton = styled.button`
   outline: none;
@@ -19,11 +19,11 @@ const PureButton = styled.button`
   }
 `;
 
-type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement>;
+type ButtonProps = ComponentPropsWithoutRef<"button">;
 
 interface Props extends ButtonProps {}
 
-const Button = (props: Props) => {
+const Button: FC<Props> = (props) => {
   return <PureButton {...props} />;
 };
 

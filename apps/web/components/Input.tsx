@@ -5,11 +5,12 @@ const InputWrap = styled.div`
   width: 100%;
 `;
 
-const Label = styled.label`
+const Label = styled.label<{ error?: boolean }>`
   display: block;
   width: 100%;
   background: rgb(255, 255, 255);
   border: 1px solid rgb(215, 219, 230);
+  ${({ error }) => error && "border-color: rgb(244, 84, 82)"}
   border-radius: 4px;
   overflow: hidden;
   &:focus-within {
@@ -29,11 +30,12 @@ const PureInput = styled.input`
   border: none;
 `;
 
-const Message = styled.div`
+const Message = styled.div<{ error?: boolean }>`
   margin-top: 4px;
   font-size: 12px;
   line-height: 20px;
   letter-spacing: -0.2px;
+  ${({ error }) => error && `color: rgb(244, 84, 82)`}
 `;
 
 type InputProps = InputHTMLAttributes<HTMLInputElement>;
@@ -49,13 +51,11 @@ interface Props extends InputProps {
 const Input = ({ error, message, style, ...rest }: Props) => {
   return (
     <InputWrap style={style}>
-      <Label style={{ borderColor: error ? " rgb(244, 84, 82)" : "" }}>
+      <Label error={error}>
         <PureInput {...rest} />
       </Label>
       {error && (
-        <Message style={{ color: message?.error ? " rgb(244, 84, 82)" : "" }}>
-          {message?.error ? message.error : message?.helper}
-        </Message>
+        <Message>{message?.error ? message.error : message?.helper}</Message>
       )}
     </InputWrap>
   );

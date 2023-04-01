@@ -1,41 +1,36 @@
+import { FormEvent } from "react";
 import SignUp from "../pages/signup";
 
 const HOST = "http://localhost:3001";
 
-export interface SignIn {
-  email: string;
-  password: string;
+class APIError extends Error {
+  constructor(message: string) {
+    super(message);
+  }
 }
 
-export function fetchSignIn(
-  data: SignIn
-): Promise<{ accessToken: string; refreshToken: string }> {
-  return fetch(HOST + "/signin", {
+export async function post<T>(url: string, data: T) {
+  const response = await fetch(`${HOST}/${url}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(data),
-  }).then((res) => {
-    if (!res.ok) throw new Error();
-    return res.json();
   });
+  if (!response.ok) {
+    const message = await response.text();
+    throw new APIError(message);
+  }
+  return response.json();
 }
 
-export interface SignUp {
-  email: string;
-  password: string;
-}
-
-export function fetchSignUp(data: SignUp): Promise<{ code: string }> {
-  return fetch(HOST + "/signup", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  }).then((res) => {
-    if (!res.ok) throw new Error();
-    return res.json();
-  });
+export function getFormData(e: FormEvent<HTMLFormElement>) {
+  const formData = new FormData(e.currentTarget);
+  const data: { [key: string]: string } = {};
+  const entries = formData.entries();
+  for (const [key, value] of entries) {
+    if (typeof value !== "string") continue;
+    data[key] = value;
+  }
+  return data;
 }

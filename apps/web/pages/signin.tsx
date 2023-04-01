@@ -1,5 +1,6 @@
 import { FormEvent } from "react";
-import { fetchSignIn } from "../apis";
+import { getFormData } from "../apis";
+import { fetchSignIn, SignIn } from "../apis/auth";
 import Button from "../components/Button";
 import Center from "../components/Center";
 import Form from "../components/Form";
@@ -15,10 +16,9 @@ const SignIn = () => {
       };
     }
   ) => {
-    const { accessToken, refreshToken } = await fetchSignIn({
-      email: e.target.email.value,
-      password: e.target.password.value,
-    });
+    const { accessToken, refreshToken } = await fetchSignIn(
+      getFormData(e) as unknown as SignIn
+    );
     localStorage.setItem("accessToken", JSON.stringify(accessToken));
     localStorage.setItem("refreshToken", JSON.stringify(refreshToken));
   };

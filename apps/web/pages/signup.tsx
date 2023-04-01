@@ -1,5 +1,6 @@
 import { FormEvent, useState } from "react";
-import { fetchSignUp } from "../apis";
+import { getFormData } from "../apis";
+import { fetchSignUp, SignUp } from "../apis/auth";
 import Button from "../components/Button";
 import Center from "../components/Center";
 import Form from "../components/Form";
@@ -16,10 +17,7 @@ const SignUp = () => {
       };
     }
   ) => {
-    await fetchSignUp({
-      email: e.target.email.value,
-      password: e.target.password.value,
-    });
+    await fetchSignUp(getFormData(e) as unknown as SignUp);
     setIsSignUp(true);
   };
 
@@ -27,6 +25,15 @@ const SignUp = () => {
     <Center>
       <Form onSubmit={onSubmit}>
         {isSignUp ? (
+          <>
+            <Title>코드 확인</Title>
+            <Input
+              placeholder="코드"
+              message={{ error: "코드를 입력해주세요." }}
+            />
+            <Button style={{ marginTop: "50px" }}>코드 확인</Button>
+          </>
+        ) : (
           <>
             <Title>회원가입</Title>
             <Input
@@ -42,15 +49,6 @@ const SignUp = () => {
               style={{ marginTop: "14px" }}
             />
             <Button style={{ marginTop: "50px" }}>회원가입</Button>
-          </>
-        ) : (
-          <>
-            <Title>코드 확인</Title>
-            <Input
-              placeholder="코드"
-              message={{ error: "코드를 입력해주세요." }}
-            />
-            <Button style={{ marginTop: "50px" }}>코드 확인</Button>
           </>
         )}
       </Form>
