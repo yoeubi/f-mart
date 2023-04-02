@@ -1,5 +1,7 @@
 import styled from "@emotion/styled";
+import Image from "next/image";
 import Link from "next/link";
+import { FC } from "react";
 
 const PureCategories = styled.nav`
   display: flex;
@@ -7,29 +9,28 @@ const PureCategories = styled.nav`
   align-items: center;
 `;
 
-const Categories = () => {
+interface Category {
+  img: string;
+  name: string;
+  src: string;
+}
+
+const Categories: FC<{ categories: Category[] }> = ({ categories }) => {
   return (
     <PureCategories>
-      <CategoryItem href="/#">
-        <CategoryImg />
-        <CategoryName>1</CategoryName>
-      </CategoryItem>
-      <CategoryItem href={"/"}>
-        <CategoryImg />
-        <CategoryName>1</CategoryName>
-      </CategoryItem>
-      <CategoryItem href={"/"}>
-        <CategoryImg />
-        <CategoryName>1</CategoryName>
-      </CategoryItem>
-      <CategoryItem href={"/"}>
-        <CategoryImg />
-        <CategoryName>1</CategoryName>
-      </CategoryItem>
-      <CategoryItem href={"/"}>
-        <CategoryImg />
-        <CategoryName>1</CategoryName>
-      </CategoryItem>
+      {categories.map((category) => (
+        <CategoryItem href={`/category/${category.src}`}>
+          <CategoryImg>
+            <Image
+              src={category.img}
+              alt={category.name}
+              width={60}
+              height={60}
+            />
+          </CategoryImg>
+          <CategoryName>{category.name}</CategoryName>
+        </CategoryItem>
+      ))}
     </PureCategories>
   );
 };

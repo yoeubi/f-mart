@@ -30,10 +30,10 @@ export default function Web() {
             <Search />
             <MainUtil>
               <Link href="/profile">
-                <Icon />
+                <Icon src="/assets/user.svg" name="나의 상회" />
               </Link>
               <Link href="/cart">
-                <Icon />
+                <Icon src="/assets/cart.svg" name="장바구니" />
               </Link>
             </MainUtil>
           </Main>
@@ -42,7 +42,7 @@ export default function Web() {
       <Layout>
         <Slide />
         <MerchadiseMain>
-          <Categories />
+          <Categories categories={[]} />
           <MerchandiseList>
             <MerchandiseItem />
             <MerchandiseItem />

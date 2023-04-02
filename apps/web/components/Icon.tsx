@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import Image from "next/image";
+import { FC } from "react";
 
 const PureIcon = styled.div`
   display: flex;
@@ -17,11 +18,16 @@ const Text = styled.span`
   color: rgb(24, 26, 28);
 `;
 
-const Icon = () => {
+interface Props {
+  src: string;
+  name: string;
+}
+
+const Icon: FC<Props> = ({ src, name }) => {
   return (
     <PureIcon>
-      <Image src="/assets/user.svg" alt="유저" width={24} height={24} />
-      <Text>장바구니</Text>
+      <Image src={src} alt={name} width={24} height={24} />
+      <Text>{name}</Text>
     </PureIcon>
   );
 };
