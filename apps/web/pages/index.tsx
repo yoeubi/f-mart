@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import Categories from "../components/Categories";
-import Header, { HeaderUtil } from "../components/Header";
+import Header from "../components/Header";
 import Icon from "../components/Icon";
 import Layout from "../components/Layout";
 import Logo from "../components/Logo";
