@@ -6,6 +6,7 @@ const PureForm = styled.form`
   width: 448px;
   border: 1px solid rgb(236, 238, 242);
   border-radius: 4px;
+  background: white;
 `;
 
 type FormProps = FormHTMLAttributes<HTMLFormElement>;
