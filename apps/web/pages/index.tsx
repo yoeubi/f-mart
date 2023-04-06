@@ -1,9 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
+import Container from "../components/Container";
 import Categories from "../components/Categories";
 import Header from "../components/Header";
 import Icon from "../components/Icon";
-import Layout from "../components/Layout";
 import Logo from "../components/Logo";
 import Main, { MainLogo, MainUtil } from "../components/Main";
 import MerchadiseMain from "../components/MerchadiseMain";
@@ -17,7 +17,7 @@ export default function Web() {
   return (
     <>
       <Header>
-        <Layout>
+        <Container>
           <Nav>
             <NavItem href="/signin">로그인/회원가입</NavItem>
           </Nav>
@@ -37,9 +37,9 @@ export default function Web() {
               </Link>
             </MainUtil>
           </Main>
-        </Layout>
+        </Container>
       </Header>
-      <Layout>
+      <Container>
         <Slide />
         <MerchadiseMain>
           <Categories categories={[]} />
@@ -76,7 +76,7 @@ export default function Web() {
             <MerchandiseItem />
           </MerchandiseList>
         </MerchadiseMain>
-      </Layout>
+      </Container>
     </>
   );
 }

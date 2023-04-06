@@ -19,7 +19,7 @@ const Categories: FC<{ categories: Category[] }> = ({ categories }) => {
   return (
     <PureCategories>
       {categories.map((category) => (
-        <CategoryItem href={`/category/${category.src}`}>
+        <CategoryItem key={category.name} href={`/category/${category.src}`}>
           <CategoryImg>
             <Image
               src={category.img}

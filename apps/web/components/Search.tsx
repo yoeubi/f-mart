@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import Image from "next/image";
+import { useState } from "react";
 
 const Form = styled.form`
   display: flex;
@@ -25,10 +26,11 @@ const Button = styled.button`
 `;
 
 const Search = () => {
+  const [keyword, setKeyword] = useState("");
   return (
     <div>
-      <Form>
-        <Input />
+      <Form method="POST" action={`/search?keyword=${keyword}`}>
+        <Input value={keyword} onChange={(e) => setKeyword(e.target.value)} />
         <Button>
           <Image src="/assets/search.svg" alt="서치" width={24} height={24} />
         </Button>
