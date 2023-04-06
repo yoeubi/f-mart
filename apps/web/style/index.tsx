@@ -10,4 +10,11 @@ export const GlobalStyle = css`
   a:visited {
     text-decoration: none;
   }
+  button {
+    border: none;
+    background: transparent;
+  }
+  input {
+    border: none;
+  }
 `;

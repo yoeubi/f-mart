@@ -51,6 +51,8 @@ const Button: FC<PropsWithChildren<Props>> = ({
 const PureButtonGroup = styled.div`
   display: inline-flex;
   gap: 4px;
+  width: 100%;
+  margin-top: 20px;
   button {
     flex: 1 1 0%;
   }
