@@ -2,6 +2,7 @@ import { Global } from "@emotion/react";
 import type { AppProps } from "next/app";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { RecoilRoot } from "recoil";
+import ToastContainer from "../components/ToastContainer";
 import { GlobalStyle } from "../style";
 
 const queryClient = new QueryClient();
@@ -12,6 +13,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
       <RecoilRoot>
         <Global styles={GlobalStyle} />
         <Component {...pageProps} />
+        <ToastContainer />
       </RecoilRoot>
     </QueryClientProvider>
   );
