@@ -12,40 +12,26 @@ import Bar, { LogoContainer, Util } from "../components/Bar";
 import Nav, { NavItem } from "../components/Nav";
 import Search from "../components/Search";
 import { GlobalStyle } from "../style";
+import { NextPage } from "next";
+import { ReactElement, ReactNode } from "react";
 
 const queryClient = new QueryClient();
 
-const MyApp = ({ Component, pageProps }: AppProps) => {
+export type NextPageWithLayout<P = {}, IP = {}> = NextPage<P, IP> & {
+  getLayout?: (page: ReactElement) => ReactNode;
+};
+
+type AppPropsWithLayout = AppProps & {
+  Component: NextPageWithLayout;
+};
+
+const MyApp = ({ Component, pageProps }: AppPropsWithLayout) => {
+  const getLayout = Component.getLayout ?? ((page) => page);
   return (
     <QueryClientProvider client={queryClient}>
       <RecoilRoot>
         <Global styles={GlobalStyle} />
-        <Header>
-          <Container>
-            <Nav>
-              <NavItem href="/signin">로그인/회원가입</NavItem>
-            </Nav>
-            <Bar>
-              <LogoContainer>
-                <Link href="/">
-                  <Logo />
-                </Link>
-              </LogoContainer>
-              <Search />
-              <Util>
-                <Link href="/profile">
-                  <Icon src="/assets/user.svg" name="나의 상회" />
-                </Link>
-                <Link href="/cart">
-                  <Icon src="/assets/cart.svg" name="장바구니" />
-                </Link>
-              </Util>
-            </Bar>
-          </Container>
-        </Header>
-        <Container>
-          <Component {...pageProps} />
-        </Container>
+        {getLayout(<Component {...pageProps} />)}
       </RecoilRoot>
     </QueryClientProvider>
   );

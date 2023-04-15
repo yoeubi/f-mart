@@ -1,13 +1,21 @@
-import { FormEvent } from "react";
+import styled from "@emotion/styled";
+import { FC, FormEvent, ReactElement } from "react";
 import { getFormData } from "../apis";
 import { fetchSignIn, SignIn } from "../apis/auth";
 import Button from "../components/Button";
 import Center from "../components/Center";
+import Container from "../components/Container";
 import Form from "../components/Form";
 import Input from "../components/Input";
 import Title from "../components/Title";
+import { NextPageWithLayout } from "./_app";
 
-const SignIn = () => {
+const FullSizeButton = styled(Button)`
+  width: 100%;
+  margin-top: 50px;
+`;
+
+const SignIn: NextPageWithLayout = () => {
   const onSubmit = async (
     e: FormEvent<HTMLFormElement> & {
       target: {
@@ -37,7 +45,7 @@ const SignIn = () => {
           message={{ error: "비밀번호를 입력해주세요." }}
           style={{ marginTop: "14px" }}
         />
-        <Button style={{ marginTop: "50px" }}>로그인</Button>
+        <FullSizeButton>로그인</FullSizeButton>
       </Form>
     </Center>
   );

@@ -1,4 +1,6 @@
+import { ReactElement } from "react";
 import Categories from "../components/Categories";
+import Layout from "../components/Layout";
 import MerchadiseMain from "../components/MerchadiseMain";
 import MerchandiseItem from "../components/MerchandiseItem";
 import MerchandiseList from "../components/MerchandiseList";
@@ -46,3 +48,7 @@ export default function Web() {
     </>
   );
 }
+
+Web.getLayout = function getLayout(page: ReactElement) {
+  return <Layout>{page}</Layout>;
+};

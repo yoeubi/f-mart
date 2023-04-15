@@ -1,10 +1,11 @@
 import styled from "@emotion/styled";
-import { useState } from "react";
+import { ReactElement, ReactNode, useState } from "react";
 import { useSetRecoilState } from "recoil";
 import { carts } from "../../atoms/cart";
 import Button, { ButtonGroup } from "../../components/Button";
 import Cart from "../../components/Cart";
 import Description from "../../components/Description";
+import Layout from "../../components/Layout";
 import Total from "../../components/Total";
 
 const PureSection = styled.section`
@@ -28,8 +29,11 @@ const Detail = () => {
   const name = "*88딜특가* 새우가 통째로 왕새우튀김 450g (1인 1개 구매가능)";
   const setCart = useSetRecoilState(carts);
   const [quantity, setQuantity] = useState(1);
-  const onChange = (value: number) => {
-    setQuantity(Math.max(value, 1));
+  const onIncrease = () => {
+    setQuantity((pre) => pre + 1);
+  };
+  const onDecrease = () => {
+    setQuantity((pre) => Math.max(pre - 1, 1));
   };
   const onSubmit = () => {
     setCart((pre) =>
@@ -55,7 +59,8 @@ const Detail = () => {
           name={name}
           quantity={quantity}
           price={price}
-          onChange={onChange}
+          onIncrease={onIncrease}
+          onDecrease={onDecrease}
         />
         <Total totalPrice={quantity * price} />
         <ButtonGroup>
@@ -67,6 +72,10 @@ const Detail = () => {
       </PureSide>
     </PureSection>
   );
+};
+
+Detail.getLayout = function getLayout(page: ReactElement) {
+  return <Layout>{page}</Layout>;
 };
 
 export default Detail;

@@ -12,7 +12,7 @@ const variantStyleMap = {
   `,
 };
 
-const PureButton = styled.button<{ variant: Variant; width: string }>`
+const PureButton = styled.button<{ variant: Variant }>`
   outline: none;
   border: none;
   border-radius: 4px;
@@ -24,7 +24,6 @@ const PureButton = styled.button<{ variant: Variant; width: string }>`
   border: 1px solid rgb(26, 124, 255);
   flex-shrink: 0;
   ${({ variant }) => variantStyleMap[variant]}
-  ${({ width }) => ({ width })}
   cursor: pointer;
   &:disabled {
     cursor: not-allowed;
@@ -37,15 +36,13 @@ type Variant = "primary" | "secondary";
 
 interface Props extends ButtonProps {
   variant?: Variant;
-  width?: string;
 }
 
 const Button: FC<PropsWithChildren<Props>> = ({
   variant = "primary",
-  width = "auto",
   ...rest
 }) => {
-  return <PureButton variant={variant} width={width} {...rest} />;
+  return <PureButton variant={variant} {...rest} />;
 };
 
 const PureButtonGroup = styled.div`

@@ -1,13 +1,15 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, ReactElement, useState } from "react";
 import { getFormData } from "../apis";
 import { fetchSignUp, SignUp } from "../apis/auth";
 import Button from "../components/Button";
 import Center from "../components/Center";
 import Form from "../components/Form";
 import Input from "../components/Input";
+import Layout from "../components/Layout";
 import Title from "../components/Title";
+import { NextPageWithLayout } from "./_app";
 
-const SignUp = () => {
+const SignUp: NextPageWithLayout = () => {
   const [isSignUp, setIsSignUp] = useState(false);
   const onSubmit = async (
     e: FormEvent<HTMLFormElement> & {
