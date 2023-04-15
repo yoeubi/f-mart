@@ -1,9 +1,7 @@
-import { Orders } from 'src/order/entity/orders.entity';
 import {
   Column,
+  CreateDateColumn,
   Entity,
-  JoinTable,
-  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -18,13 +16,13 @@ export class User {
   @Column()
   password: string;
 
-  @Column()
+  @Column({ default: false })
   isActive: boolean;
 
-  @OneToMany((type) => Orders, (orders) => orders)
-  @JoinTable()
-  orders: Orders[];
+  // @OneToMany((type) => Orders, (orders) => orders)
+  // @JoinTable()
+  // orders: Orders[];
 
-  @Column()
+  @CreateDateColumn()
   createdAt: Date;
 }
