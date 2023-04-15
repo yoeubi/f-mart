@@ -2,7 +2,12 @@ import { CacheModule, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AuthModule } from './auth/auth.module';
 import * as redisStore from 'cache-manager-ioredis';
+import { User } from './users/entity/user.entity';
+import { ConfigModule } from '@nestjs/config';
+import { RefreshToken } from './users/entity/refreshToken.entity';
+import { Verification } from './users/entity/verification.entity';
 
 @Module({
   imports: [
@@ -18,9 +23,11 @@ import * as redisStore from 'cache-manager-ioredis';
       username: 'root',
       password: 'root',
       database: 'test',
-      autoLoadEntities: true,
+      entities: [User, RefreshToken, Verification],
       synchronize: true,
     }),
+    ConfigModule.forRoot(),
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

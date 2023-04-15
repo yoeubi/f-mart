@@ -14,13 +14,13 @@ export class Orders {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  @ManyToOne((type) => User, (user) => user.id)
-  userId: number;
+  // @Column()
+  // @ManyToOne((type) => User, (user) => user.orders)
+  // user: User;
 
   @OneToMany((type) => OrderDetail, (orderDetail) => orderDetail.id)
   @JoinTable()
-  orders: number[];
+  orderDetails: number[];
 
   @Column()
   createdAt: Date;

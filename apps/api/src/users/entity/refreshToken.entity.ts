@@ -1,7 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-export class refreshToken {
+export class RefreshToken {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -11,6 +11,6 @@ export class refreshToken {
   @Column()
   userId: number;
 
-  @Column()
-  expiredAt: Date;
+  @Column({ type: 'timestamp', default: Date.now() + 7 * 24 * 60 * 60 * 1000 })
+  expiredAt: number;
 }
