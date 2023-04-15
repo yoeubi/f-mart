@@ -1,7 +1,6 @@
 import { FormEvent } from "react";
-import SignUp from "../pages/signup";
 
-const HOST = "http://localhost:3001";
+const HOST = "http://localhost:3003";
 
 class APIError extends Error {
   constructor(message: string) {
@@ -10,7 +9,7 @@ class APIError extends Error {
 }
 
 export async function post<T>(url: string, data: T) {
-  const response = await fetch(`${HOST}/${url}`, {
+  const response = await fetch(`${HOST}${url}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

@@ -1,11 +1,20 @@
+import { css } from "@emotion/react";
+import styled from "@emotion/styled";
+import Image from "next/image";
 import { FormEvent } from "react";
 import { getFormData } from "../apis";
 import { fetchSignIn, SignIn } from "../apis/auth";
 import Button from "../components/Button";
 import Center from "../components/Center";
+import Flex from "../components/Flex";
 import Form from "../components/Form";
 import Input from "../components/Input";
+import SocialButton from "../components/SocialButton";
 import Title from "../components/Title";
+
+const circleStyle = css`
+  border-radius: 50%;
+`;
 
 const SignIn = () => {
   const onSubmit = async (
@@ -16,6 +25,7 @@ const SignIn = () => {
       };
     }
   ) => {
+    e.preventDefault();
     const { accessToken, refreshToken } = await fetchSignIn(
       getFormData(e) as unknown as SignIn
     );
@@ -38,6 +48,7 @@ const SignIn = () => {
           style={{ marginTop: "14px" }}
         />
         <Button style={{ marginTop: "50px" }}>로그인</Button>
+        <SocialButton />
       </Form>
     </Center>
   );
