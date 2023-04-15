@@ -1,24 +1,24 @@
 import styled from "@emotion/styled";
 import { FC, PropsWithChildren } from "react";
 
-const PureMain = styled.div`
+const PureBar = styled.div`
   height: 79px;
   display: flex;
   align-items: center;
 `;
 
-const Main: FC<PropsWithChildren> = (props) => {
-  return <PureMain {...props} />;
+const Bar: FC<PropsWithChildren> = (props) => {
+  return <PureBar {...props} />;
 };
 
-export const MainUtil = styled.div`
+export const Util = styled.div`
   display: flex;
   align-items: center;
   margin-left: auto;
 `;
 
-export const MainLogo = styled.div`
+export const LogoContainer = styled.div`
   margin-right: 40px;
 `;
 
-export default Main;
+export default Bar;
