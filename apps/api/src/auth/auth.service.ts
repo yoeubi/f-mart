@@ -1,4 +1,5 @@
-import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import { ForbiddenException } from '@nestjs/common/exceptions/forbidden.exception';
 import { ConfigType } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -7,6 +8,7 @@ import { RefreshToken } from 'src/users/entity/refreshToken.entity';
 import { User } from 'src/users/entity/user.entity';
 import { Verification } from 'src/users/entity/verification.entity';
 import { Repository } from 'typeorm';
+import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { SignInDto } from './dto/sign-in.dto';
 import { SignUpDto } from './dto/sign-up.dto';
 import { VerificationDto } from './dto/verification.dto';
@@ -31,17 +33,17 @@ export class AuthService {
       email: signInDto.email,
     });
     if (!user) {
-      throw new UnauthorizedException('User dose not exists');
+      throw new BadRequestException('User credential mismatched');
     }
-    // if (!user.isActive) {
-    //   throw new UnauthorizedException('User is not active');
-    // }
+    if (!user.isActive) {
+      throw new ForbiddenException('User is not active');
+    }
     const isEqual = await this.hashingService.compare(
       signInDto.password,
       user.password,
     );
     if (!isEqual) {
-      throw new UnauthorizedException('Password does not match');
+      throw new BadRequestException('User credential mismatched');
     }
 
     const token = await this.generateToken(user);
@@ -74,20 +76,49 @@ export class AuthService {
   }
 
   async verification(verificationDto: VerificationDto) {
-    // try {
-    //   await this.verificationRepository.findOneBy({});
-    // } catch (error) {}
+    const verification = await this.verificationRepository.findOneBy({
+      code: verificationDto.code,
+    });
+    const isExpired = verification.expiredAt < Date.now();
+    if (isExpired) {
+      throw new BadRequestException('Code is expired');
+    }
+    const user = await this.usersRepository.save({
+      id: verification.userId,
+      isActive: true,
+    });
+    await this.verificationRepository.update(
+      { id: verification.id },
+      {
+        expiredAt: Date.now(),
+      },
+    );
+    const token = await this.generateToken(user);
+    return token;
   }
 
-  async refresh() {
-    // this.refreshTokenRepository.findOneBy({
-    //   userId
-    // })
-    // const token = await this.generateToken(user);
-    // const refreshToken = new RefreshToken();
-    // refreshToken.token = token.refreshToken;
-    // refreshToken.userId = user.id;
-    // await this.refreshTokenRepository.upsert(refreshToken, ['userId']);
+  async refresh(refreshTokenDto: RefreshTokenDto) {
+    const refresh = await this.refreshTokenRepository.findOneBy({
+      token: refreshTokenDto.refreshToken,
+    });
+    const isExpired = refresh.expiredAt < Date.now();
+    if (isExpired) {
+      throw new BadRequestException('Token is expired');
+    }
+    const user = await this.usersRepository.findOneBy({
+      id: refresh.userId,
+    });
+    const token = await this.generateToken(user);
+    await this.refreshTokenRepository.update(
+      {
+        id: refresh.id,
+      },
+      {
+        token: token.refreshToken,
+        expiredAt: Date.now() + 7 * 24 * 60 * 60 * 1000,
+      },
+    );
+    return token;
   }
 
   async generateToken(user: User) {
@@ -95,7 +126,7 @@ export class AuthService {
       this.signToken(user.id, this.jwtConfiguration.accessTokenTtl, {
         email: user.email,
       }),
-      this.signToken(user.id, this.jwtConfiguration.refreshTokenTtl),
+      randomUUID(),
     ]);
     return {
       accessToken,

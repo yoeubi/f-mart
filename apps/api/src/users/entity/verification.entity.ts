@@ -1,9 +1,4 @@
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Verification {
@@ -16,6 +11,6 @@ export class Verification {
   @Column()
   code: string;
 
-  @CreateDateColumn()
-  expiredAt: Date;
+  @Column({ type: 'timestamp', default: Date.now() + 5 * 1000 })
+  expiredAt: number;
 }

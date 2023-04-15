@@ -1,10 +1,7 @@
-import { Orders } from 'src/order/entity/orders.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinTable,
-  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
