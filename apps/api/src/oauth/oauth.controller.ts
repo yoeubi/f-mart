@@ -8,8 +8,6 @@ export class OauthController {
 
   @Post('kakao')
   authByKakao(@Body() oAuthDto: OAuthDto) {
-    console.log(oAuthDto);
-
     return this.oauthService.getAuth(oAuthDto);
   }
 }

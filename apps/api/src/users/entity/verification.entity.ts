@@ -11,6 +11,6 @@ export class Verification {
   @Column()
   code: string;
 
-  @Column({ type: 'timestamp', default: Date.now() + 5 * 1000 })
-  expiredAt: number;
+  // @Column({ default: new Date(), nullable: true })
+  // expiredAt: Date;
 }

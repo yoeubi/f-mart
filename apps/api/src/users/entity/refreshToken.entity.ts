@@ -11,6 +11,6 @@ export class RefreshToken {
   @Column()
   userId: number;
 
-  @Column({ type: 'timestamp', default: Date.now() + 7 * 24 * 60 * 60 * 1000 })
-  expiredAt: number;
+  // @Column({ default: new Date(), nullable: true })
+  // expiredAt: Date;
 }

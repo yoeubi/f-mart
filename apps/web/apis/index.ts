@@ -20,7 +20,7 @@ export async function post<T>(url: string, data: T) {
     const message = await response.text();
     throw new APIError(message);
   }
-  return response.json();
+  // return response.json();
 }
 
 export function getFormData(e: FormEvent<HTMLFormElement>) {
