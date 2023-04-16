@@ -1,4 +1,4 @@
-import { post } from ".";
+import { HOST, post } from ".";
 
 const CLIENT_ID = "871c4edc1c6d18ca4d2eedce73eaf16f";
 const REDIRECT_URI = "http://localhost:3000/oauth/kakao";
@@ -26,8 +26,18 @@ export async function getTokenByKakao(code: string) {
   return token;
 }
 
-export function signInByKakao(accessToken: string) {
-  return post("/oauth/kakao", {
-    accessToken,
+export async function signInByKakao(
+  kakaoAccessToken: string
+): Promise<{ accessToken: string; refreshToken: string }> {
+  const response = await fetch(HOST + "/oauth/kakao", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify({ accessToken: kakaoAccessToken }),
   });
+  const accessToken = response.headers.get("access_token") || "";
+  const refreshToken = response.headers.get("refresh_token") || "";
+  return { accessToken, refreshToken };
 }

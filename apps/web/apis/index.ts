@@ -1,6 +1,6 @@
 import { FormEvent } from "react";
 
-const HOST = "http://localhost:3003";
+export const HOST = "http://localhost:3003";
 
 class APIError extends Error {
   constructor(message: string) {
@@ -14,13 +14,14 @@ export async function post<T>(url: string, data: T) {
     headers: {
       "Content-Type": "application/json",
     },
+    credentials: "include",
     body: JSON.stringify(data),
   });
   if (!response.ok) {
     const message = await response.text();
     throw new APIError(message);
   }
-  // return response.json();
+  return response.json();
 }
 
 export function getFormData(e: FormEvent<HTMLFormElement>) {
