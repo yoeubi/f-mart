@@ -72,9 +72,9 @@ const Cart: FC<Props> = ({ name, quantity, price, onIncrease, onDecrease }) => {
       <PureTitle>{name}</PureTitle>
       <PurePanel>
         <PureCartButton>
-          <PureButton onClick={onIncrease}>-</PureButton>
+          <PureButton onClick={onDecrease}>-</PureButton>
           <PureInput value={quantity} />
-          <PureButton onClick={onDecrease}>+</PureButton>
+          <PureButton onClick={onIncrease}>+</PureButton>
         </PureCartButton>
         <div>{quantity * price}원</div>
       </PurePanel>

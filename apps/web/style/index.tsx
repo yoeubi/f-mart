@@ -4,7 +4,6 @@ export const GlobalStyle = css`
   body {
     margin: 0;
     padding: 0;
-    background: rgb(243, 245, 247);
   }
   a,
   a:visited {

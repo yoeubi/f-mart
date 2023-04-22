@@ -7,6 +7,7 @@ const PureMerchadiseMain = styled.div`
   display: flex;
   flex-direction: column;
   gap: 36px;
+  background: rgb(243, 245, 247);
 `;
 
 const MerchadiseMain: FC<PropsWithChildren> = (props) => {

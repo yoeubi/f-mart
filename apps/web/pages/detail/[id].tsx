@@ -11,7 +11,7 @@ import Total from "../../components/Total";
 const PureSection = styled.section`
   display: flex;
   padding: 64px 0;
-  gap: 50px;
+  justify-content: space-between;
   background: white;
   min-height: calc(100vh - 125px);
 `;
