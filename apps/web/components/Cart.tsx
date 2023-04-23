@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import { FC } from "react";
+import Quantity, { QauntityProps } from "./Quantity";
 
 const PureCart = styled.div`
   padding: 16px;
@@ -33,37 +34,9 @@ const PurePanel = styled.div`
   align-items: center;
 `;
 
-const PureCartButton = styled.div`
-  width: 112px;
-  height: 40px;
-  min-width: 112px;
-  min-height: 40px;
-  display: flex;
-  align-items: center;
-  background: rgb(255, 255, 255);
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  box-sizing: border-box;
-  border-radius: 4px;
-`;
-
-const PureButton = styled.button`
-  width: 40px;
-  height: 40px;
-  flex-shrink: 0;
-`;
-
-const PureInput = styled.input`
-  width: 100%;
-  flex-grow: 1;
-  text-align: center;
-`;
-
-interface Props {
+interface Props extends QauntityProps {
   name: string;
-  quantity: number;
   price: number;
-  onIncrease: () => void;
-  onDecrease: () => void;
 }
 
 const Cart: FC<Props> = ({ name, quantity, price, onIncrease, onDecrease }) => {
@@ -71,11 +44,11 @@ const Cart: FC<Props> = ({ name, quantity, price, onIncrease, onDecrease }) => {
     <PureCart>
       <PureTitle>{name}</PureTitle>
       <PurePanel>
-        <PureCartButton>
-          <PureButton onClick={onDecrease}>-</PureButton>
-          <PureInput value={quantity} />
-          <PureButton onClick={onIncrease}>+</PureButton>
-        </PureCartButton>
+        <Quantity
+          quantity={quantity}
+          onIncrease={onIncrease}
+          onDecrease={onDecrease}
+        />
         <div>{quantity * price}원</div>
       </PurePanel>
     </PureCart>
