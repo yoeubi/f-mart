@@ -1,10 +1,8 @@
 import styled from "@emotion/styled";
 import { FC } from "react";
-import { useRecoilState } from "recoil";
 import Button from "./Button";
 import Checkbox from "./Checkbox";
 import Quantity from "./Quantity";
-import { cartsAtom } from "../atoms/cart";
 
 const PureCart = styled.li`
   display: flex;
@@ -65,14 +63,16 @@ const PureList = styled.ul`
   gap: 20px;
 `;
 
+export interface MerchandiseItem {
+  id: number;
+  name: string;
+  thumbnail: string;
+  price: number;
+}
+
 export interface CartItemProps {
   storeName: string;
-  merchandises: {
-    id: number;
-    name: string;
-    thumbnail: string;
-    price: number;
-  }[];
+  merchandises: MerchandiseItem[];
 }
 
 const CartItem: FC<CartItemProps> = ({ storeName, merchandises }) => {
