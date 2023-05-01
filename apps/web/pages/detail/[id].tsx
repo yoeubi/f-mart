@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { ReactElement, ReactNode, useState } from "react";
 import { useSetRecoilState } from "recoil";
-import { carts } from "../../atoms/cart";
+import { cartsAtom } from "../../atoms/cart";
 import Button, { ButtonGroup } from "../../components/Button";
 import Cart from "../../components/Cart";
 import Description from "../../components/Description";
@@ -11,7 +11,7 @@ import Total from "../../components/Total";
 const PureSection = styled.section`
   display: flex;
   padding: 64px 0;
-  gap: 50px;
+  justify-content: space-between;
   background: white;
   min-height: calc(100vh - 125px);
 `;
@@ -27,7 +27,7 @@ const PureSide = styled.aside`
 const Detail = () => {
   const price = 7500;
   const name = "*88딜특가* 새우가 통째로 왕새우튀김 450g (1인 1개 구매가능)";
-  const setCart = useSetRecoilState(carts);
+  const setCart = useSetRecoilState(cartsAtom);
   const [quantity, setQuantity] = useState(1);
   const onIncrease = () => {
     setQuantity((pre) => pre + 1);
