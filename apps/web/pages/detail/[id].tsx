@@ -7,6 +7,7 @@ import Cart from "../../components/Cart";
 import Description from "../../components/Description";
 import Layout from "../../components/Layout";
 import Total from "../../components/Total";
+import { GetServerSideProps } from "next";
 
 const PureSection = styled.section`
   display: flex;
@@ -76,6 +77,22 @@ const Detail = () => {
 
 Detail.getLayout = function getLayout(page: ReactElement) {
   return <Layout>{page}</Layout>;
+};
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const { req } = ctx;
+  const { access_token: accessToken } = req.cookies;
+  if (!accessToken) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: {},
+  };
 };
 
 export default Detail;
