@@ -10,19 +10,19 @@ const PureCategories = styled.nav`
 `;
 
 interface Category {
-  img: string;
+  thumbnail: string;
   name: string;
-  src: string;
+  id: number;
 }
 
 const Categories: FC<{ categories: Category[] }> = ({ categories }) => {
   return (
     <PureCategories>
       {categories.map((category) => (
-        <CategoryItem key={category.name} href={`/category/${category.src}`}>
+        <CategoryItem key={category.name} href={`/category/${category.id}`}>
           <CategoryImg>
             <Image
-              src={category.img}
+              src={category.thumbnail}
               alt={category.name}
               width={60}
               height={60}
@@ -47,6 +47,7 @@ const CategoryImg = styled.div`
   height: 60px;
   border-radius: 16px;
   background: blue;
+  overflow: hidden;
 `;
 
 const CategoryName = styled.span`

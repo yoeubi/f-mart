@@ -1,17 +1,25 @@
 import styled from "@emotion/styled";
 import Image from "next/image";
 import { FC, PropsWithChildren } from "react";
-import slideImg from "../public/assets/slide.webp";
 
 const PureSlide = styled.div`
   height: 300px;
   background: gray;
+  display: flex;
+  flex-flow: row nowrap;
+  overflow: auto;
 `;
 
-const Slide: FC<PropsWithChildren> = () => {
+interface Props {
+  slides: string[];
+}
+
+const Slide: FC<PropsWithChildren<Props>> = ({ slides }) => {
   return (
     <PureSlide>
-      <Image src={slideImg} alt="슬라이드" />
+      {slides.map((slide) => (
+        <Image src={slide} alt="슬라이드" width={1080} height={300} />
+      ))}
     </PureSlide>
   );
 };

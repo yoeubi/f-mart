@@ -8,18 +8,22 @@ import Slide from "../components/Slide";
 import { GetServerSideProps } from "next";
 import { Merchandise, getMerchandises } from "../apis/merchandise";
 import Link from "next/link";
+import { getSlides } from "../apis/slide";
+import { Category, getCategories } from "../apis/category";
 
 interface Props {
-  data: Merchandise[];
+  list: Merchandise[];
+  slides: string[];
+  categories: Category[];
 }
 
-export default function Web({ data }: Props) {
+export default function Web({ list, slides, categories }: Props) {
   return (
     <>
-      <Slide />
+      <Slide slides={slides} />
       <MerchadiseMain>
-        <Categories categories={[]} />
-        {data.map((item) => (
+        <Categories categories={categories} />
+        {list.map((item) => (
           <MerchandiseList key={item.id} name={item.name}>
             {item.merchandises.map((merchandise) => (
               <Link key={merchandise.id} href={`/detail/${merchandise.id}`}>
@@ -38,10 +42,14 @@ Web.getLayout = function getLayout(page: ReactElement) {
 };
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const data = await getMerchandises();
+  const list = await getMerchandises();
+  const slides = await getSlides();
+  const categories = await getCategories();
   return {
     props: {
-      data,
+      list,
+      slides,
+      categories,
     },
   };
 };
