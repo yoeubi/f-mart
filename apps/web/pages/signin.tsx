@@ -8,14 +8,13 @@ import Form from "../components/Form";
 import Input from "../components/Input";
 import SocialButton from "../components/SocialButton";
 import Title from "../components/Title";
-import { NextPageWithLayout } from "./_app";
 
 const FullSizeButton = styled(Button)`
   width: 100%;
   margin-top: 50px;
 `;
 
-const SignIn: NextPageWithLayout = () => {
+const SignIn = () => {
   const onSubmit = async (
     e: FormEvent<HTMLFormElement> & {
       target: {
@@ -38,12 +37,12 @@ const SignIn: NextPageWithLayout = () => {
         <Input
           name="email"
           placeholder="이메일"
-          message={{ error: "이메일를 입력해주세요." }}
+          errorText="이메일를 입력해주세요."
         />
         <Input
           type="password"
           placeholder="비밀번호"
-          message={{ error: "비밀번호를 입력해주세요." }}
+          errorText="비밀번호를 입력해주세요."
           style={{ marginTop: "14px" }}
         />
         <FullSizeButton>로그인</FullSizeButton>
