@@ -1,12 +1,12 @@
 import styled from "@emotion/styled";
-import { FC, FormEvent, ReactElement } from "react";
+import { FormEvent } from "react";
 import { getFormData } from "../apis";
 import { fetchSignIn, SignIn } from "../apis/auth";
 import Button from "../components/Button";
 import Center from "../components/Center";
-import Container from "../components/Container";
 import Form from "../components/Form";
 import Input from "../components/Input";
+import SocialButton from "../components/SocialButton";
 import Title from "../components/Title";
 import { NextPageWithLayout } from "./_app";
 
@@ -24,6 +24,7 @@ const SignIn: NextPageWithLayout = () => {
       };
     }
   ) => {
+    e.preventDefault();
     const { accessToken, refreshToken } = await fetchSignIn(
       getFormData(e) as unknown as SignIn
     );
@@ -46,6 +47,7 @@ const SignIn: NextPageWithLayout = () => {
           style={{ marginTop: "14px" }}
         />
         <FullSizeButton>로그인</FullSizeButton>
+        <SocialButton />
       </Form>
     </Center>
   );

@@ -2,6 +2,7 @@ import { CacheModule, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { OauthModule } from './oauth/oauth.module';
 import { AuthModule } from './auth/auth.module';
 import * as redisStore from 'cache-manager-ioredis';
 import { User } from './users/entity/user.entity';
@@ -26,6 +27,7 @@ import { Verification } from './users/entity/verification.entity';
       entities: [User, RefreshToken, Verification],
       synchronize: true,
     }),
+    OauthModule,
     ConfigModule.forRoot(),
     AuthModule,
   ],

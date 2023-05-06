@@ -79,10 +79,10 @@ export class AuthService {
     const verification = await this.verificationRepository.findOneBy({
       code: verificationDto.code,
     });
-    const isExpired = verification.expiredAt < Date.now();
-    if (isExpired) {
-      throw new BadRequestException('Code is expired');
-    }
+    // const isExpired = verification.expiredAt.getTime() < Date.now();
+    // if (isExpired) {
+    //   throw new BadRequestException('Code is expired');
+    // }
     const user = await this.usersRepository.save({
       id: verification.userId,
       isActive: true,
@@ -90,7 +90,7 @@ export class AuthService {
     await this.verificationRepository.update(
       { id: verification.id },
       {
-        expiredAt: Date.now(),
+        // expiredAt: Date.now(),
       },
     );
     const token = await this.generateToken(user);
@@ -101,10 +101,10 @@ export class AuthService {
     const refresh = await this.refreshTokenRepository.findOneBy({
       token: refreshTokenDto.refreshToken,
     });
-    const isExpired = refresh.expiredAt < Date.now();
-    if (isExpired) {
-      throw new BadRequestException('Token is expired');
-    }
+    // const isExpired = refresh.expiredAt.getTime() < Date.now();
+    // if (isExpired) {
+    //   throw new BadRequestException('Token is expired');
+    // }
     const user = await this.usersRepository.findOneBy({
       id: refresh.userId,
     });
@@ -115,7 +115,7 @@ export class AuthService {
       },
       {
         token: token.refreshToken,
-        expiredAt: Date.now() + 7 * 24 * 60 * 60 * 1000,
+        // expiredAt: Date.now() + 7 * 24 * 60 * 60 * 1000,
       },
     );
     return token;
@@ -147,5 +147,16 @@ export class AuthService {
         expiresIn,
       },
     );
+  }
+
+  async getToken(user: User) {
+    const token = await this.generateToken(user);
+
+    const refreshToken = new RefreshToken();
+    refreshToken.token = token.refreshToken;
+    refreshToken.userId = user.id;
+    await this.refreshTokenRepository.upsert(refreshToken, ['userId']);
+
+    return token;
   }
 }

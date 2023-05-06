@@ -25,5 +25,6 @@ import { Verification } from 'src/users/entity/verification.entity';
       useClass: BcryptService,
     },
   ],
+  exports: [AuthService],
 })
 export class AuthModule {}
