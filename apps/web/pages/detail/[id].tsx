@@ -82,6 +82,7 @@ Detail.getLayout = function getLayout(page: ReactElement) {
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { req } = ctx;
   const { access_token: accessToken } = req.cookies;
+
   if (!accessToken) {
     return {
       redirect: {

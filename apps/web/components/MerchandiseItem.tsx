@@ -1,5 +1,7 @@
 import styled from "@emotion/styled";
 import Image from "next/image";
+import { FC } from "react";
+import { MerchandiseItem } from "../apis/merchandise";
 
 const PureMerchadiseItem = styled.li``;
 
@@ -24,13 +26,21 @@ const Text = styled.div`
   -webkit-line-clamp: 2;
 `;
 
-const MerchandiseItem = () => {
+const Price = styled.div`
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: -0.4px;
+  font-weight: 700;
+  color: rgb(24, 26, 28);
+`;
+
+const MerchandiseItem: FC<MerchandiseItem> = ({ name, price, thumbnail }) => {
   return (
     <PureMerchadiseItem>
-      <Image src="/assets/shrimp.webp" alt="새우" width={144} height={144} />
+      <Image src={thumbnail} alt={name} width={144} height={144} />
       <Description>
-        <Text>[다이아몬드] 탈각새우(31/40) 900g / 냉동 생 칵테일새우(IQF)</Text>
-        <div className="price">13,880원</div>
+        <Text>{name}</Text>
+        <Price>{price.toLocaleString()}원</Price>
       </Description>
     </PureMerchadiseItem>
   );

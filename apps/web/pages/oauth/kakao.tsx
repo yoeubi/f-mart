@@ -24,10 +24,10 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       code as string
     );
     const { accessToken, refreshToken } = await signInByKakao(kakaoAccessToken);
-    res.setHeader(
-      "Set-Cookie",
-      `access_token=${accessToken}&refresh_token=${refreshToken}`
-    );
+    console.log(accessToken, refreshToken);
+
+    res.setHeader("Set-Cookie", `access_token=${accessToken};`);
+    res.setHeader("Set-Cookie", `refresh_token=${refreshToken};`);
     return {
       redirect: {
         destination: "/",

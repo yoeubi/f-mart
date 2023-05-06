@@ -15,8 +15,6 @@ interface KakaoToken {
 }
 
 export async function getTokenByKakao(code: string) {
-  console.log("client run");
-
   const formData = new URLSearchParams();
   formData.append("code", code);
   formData.append("grant_type", "authorization_code");

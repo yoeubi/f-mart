@@ -21,10 +21,14 @@ const List = styled.ul`
   gap: 16px;
 `;
 
-const MerchandiseList: FC<PropsWithChildren> = ({ children }) => {
+interface Props {
+  name: string;
+}
+
+const MerchandiseList: FC<PropsWithChildren<Props>> = ({ children, name }) => {
   return (
     <PureMerchandiseList>
-      <Title>다시 돌아온 88딜</Title>
+      <Title>{name}</Title>
       <List>{children}</List>
     </PureMerchandiseList>
   );
