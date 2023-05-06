@@ -6,6 +6,7 @@ import CartItem, { CartItemProps } from "../components/CartItem";
 import Checkbox from "../components/Checkbox";
 import Layout from "../components/Layout";
 import Quantity from "../components/Quantity";
+import { GetServerSideProps } from "next";
 
 const PureTitle = styled.div`
   font-size: 24px;
@@ -105,6 +106,23 @@ const Cart = () => {
 
 Cart.getLayout = function getLayout(page: ReactElement) {
   return <Layout>{page}</Layout>;
+};
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const { req } = ctx;
+  const { access_token: accessToken } = req.cookies;
+
+  if (!accessToken) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: {},
+  };
 };
 
 export default Cart;

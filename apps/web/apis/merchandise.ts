@@ -128,3 +128,8 @@ export async function getMerchandises(): Promise<Merchandise[]> {
   ];
   return data;
 }
+
+export async function getMerchandiseItem(id: number): Promise<MerchandiseItem> {
+  const item = list[id];
+  return item;
+}

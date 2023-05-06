@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { ReactElement, ReactNode, useState } from "react";
+import { FC, ReactElement, ReactNode, useState } from "react";
 import { useSetRecoilState } from "recoil";
 import { cartsAtom } from "../../atoms/cart";
 import Button, { ButtonGroup } from "../../components/Button";
@@ -8,6 +8,11 @@ import Description from "../../components/Description";
 import Layout from "../../components/Layout";
 import Total from "../../components/Total";
 import { GetServerSideProps } from "next";
+import { MerchandiseItem, getMerchandiseItem } from "../../apis/merchandise";
+import { NextPageWithLayout } from "../_app";
+import Image from "next/image";
+import { useMutation, useQueryClient } from "react-query";
+import { postCart } from "../../apis/cart";
 
 const PureSection = styled.section`
   display: flex;
@@ -21,14 +26,28 @@ const PureMain = styled.main`
   width: 660px;
 `;
 
+const PureImageWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 const PureSide = styled.aside`
   width: 368px;
 `;
 
-const Detail = () => {
-  const price = 7500;
-  const name = "*88딜특가* 새우가 통째로 왕새우튀김 450g (1인 1개 구매가능)";
-  const setCart = useSetRecoilState(cartsAtom);
+interface Props {
+  item: MerchandiseItem;
+}
+
+const Detail: NextPageWithLayout<Props> = ({ item }) => {
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: postCart,
+    onSuccess() {
+      queryClient.invalidateQueries("cart");
+    },
+  });
   const [quantity, setQuantity] = useState(1);
   const onIncrease = () => {
     setQuantity((pre) => pre + 1);
@@ -37,33 +56,33 @@ const Detail = () => {
     setQuantity((pre) => Math.max(pre - 1, 1));
   };
   const onSubmit = () => {
-    setCart((pre) =>
-      pre.concat({
-        merchandiseId: 1,
-        quantity,
-      })
-    );
+    mutation.mutate({
+      ...item,
+      quantity,
+    });
   };
   return (
     <PureSection>
       <PureMain>
-        <div style={{ padding: "0 64px" }}>
-          <img
-            style={{ width: "100%" }}
-            src="https://cdn-mart.baemin.com/sellergoods/main/3d4bfbad-b4a0-414a-86a8-db7cf32039a2.jpg"
+        <PureImageWrapper>
+          <Image
+            src={item.thumbnail}
+            alt={item.name}
+            width={464}
+            height={464}
           />
-        </div>
+        </PureImageWrapper>
       </PureMain>
       <PureSide>
-        <Description name={name} price={price} />
+        <Description name={item.name} price={item.price} />
         <Cart
-          name={name}
+          name={item.name}
           quantity={quantity}
-          price={price}
+          price={item.price}
           onIncrease={onIncrease}
           onDecrease={onDecrease}
         />
-        <Total totalPrice={quantity * price} />
+        <Total totalPrice={quantity * item.price} />
         <ButtonGroup>
           <Button variant="secondary" onClick={onSubmit}>
             장바구니 담기
@@ -80,19 +99,12 @@ Detail.getLayout = function getLayout(page: ReactElement) {
 };
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const { req } = ctx;
-  const { access_token: accessToken } = req.cookies;
-
-  if (!accessToken) {
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false,
-      },
-    };
-  }
+  const { id } = ctx.query;
+  const item = await getMerchandiseItem(Number(id));
   return {
-    props: {},
+    props: {
+      item,
+    },
   };
 };
 

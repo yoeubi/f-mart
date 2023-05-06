@@ -36,7 +36,7 @@ const Quantity: FC<QauntityProps> = ({ quantity, onIncrease, onDecrease }) => {
   return (
     <PureQuantityButton>
       <PureButton onClick={onDecrease}>-</PureButton>
-      <PureInput value={quantity} />
+      <PureInput value={quantity} readOnly />
       <PureButton onClick={onIncrease}>+</PureButton>
     </PureQuantityButton>
   );
