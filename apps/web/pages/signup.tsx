@@ -8,6 +8,7 @@ import Title from "../components/Title";
 import styled from "@emotion/styled";
 import { useFormState } from "../hooks/form";
 import { css } from "@emotion/react";
+import { useRouter } from "next/router";
 
 const FullSizeButton = styled(Button)`
   width: 100%;
@@ -15,19 +16,25 @@ const FullSizeButton = styled(Button)`
 `;
 
 const SignUp = () => {
+  const router = useRouter();
   const [isSignUp, setIsSignUp] = useState(false);
-  const onSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    if (emailError || passwordError) return;
-    await fetchSignUp({ email, password });
-    setIsSignUp(true);
-  };
   const [code, onChangeCode, codeError] = useFormState("", (value) => !value);
   const [email, onChangEmail, emailError] = useFormState("", (value) => !value);
   const [password, onChangePassword, passwordError] = useFormState(
     "",
     (value) => !value
   );
+
+  const onSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    if (emailError || passwordError) return;
+    if (!isSignUp) {
+      await fetchSignUp({ email, password });
+      setIsSignUp(true);
+    } else {
+      router.replace("/");
+    }
+  };
 
   return (
     <Center>
