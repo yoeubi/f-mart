@@ -49,6 +49,7 @@ const Input = ({
   error,
   errorText,
   style,
+  placeholder,
   value,
   onChange,
   ...rest
@@ -56,7 +57,11 @@ const Input = ({
   return (
     <InputWrap {...rest}>
       <Label error={error}>
-        <PureInput value={value} onChange={onChange} />
+        <PureInput
+          value={value}
+          onChange={onChange}
+          placeholder={placeholder}
+        />
       </Label>
       {error && <Message error={error}>{errorText}</Message>}
     </InputWrap>

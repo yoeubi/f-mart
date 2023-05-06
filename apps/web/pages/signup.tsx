@@ -14,8 +14,6 @@ const FullSizeButton = styled(Button)`
   margin-top: 50px;
 `;
 
-const MarginTopInput = styled(Input)``;
-
 const SignUp = () => {
   const [isSignUp, setIsSignUp] = useState(false);
   const onSubmit = async (e: FormEvent) => {
