@@ -57,7 +57,7 @@ const Detail: NextPageWithLayout<Props> = ({ item }) => {
   };
   const onSubmit = () => {
     mutation.mutate({
-      ...item,
+      merchandiseId: item.id,
       quantity,
     });
   };

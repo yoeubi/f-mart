@@ -109,7 +109,7 @@ function generate(): MerchandiseItem[] {
   }));
 }
 
-const list = generate();
+export const list = generate();
 
 export async function getMerchandises(): Promise<Merchandise[]> {
   const category1 = list.slice(0, 6);
