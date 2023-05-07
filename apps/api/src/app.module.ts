@@ -11,6 +11,7 @@ import { RefreshToken } from './users/entity/refreshToken.entity';
 import { Verification } from './users/entity/verification.entity';
 import { SlidesModule } from './slides/slides.module';
 import { CategoriesModule } from './categories/categories.module';
+import { MerchandiseModule } from './merchandise/merchandise.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { CategoriesModule } from './categories/categories.module';
     AuthModule,
     SlidesModule,
     CategoriesModule,
+    MerchandiseModule,
   ],
   controllers: [AppController],
   providers: [AppService],
