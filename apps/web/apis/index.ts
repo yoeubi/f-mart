@@ -34,3 +34,17 @@ export function getFormData(e: FormEvent<HTMLFormElement>) {
   }
   return data;
 }
+
+export async function get<T>(url: string) {
+  const response = await fetch(`${HOST}${url}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  if (!response.ok) {
+    const message = await response.text();
+    throw new APIError(message);
+  }
+  return response.json();
+}
