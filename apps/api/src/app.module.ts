@@ -12,6 +12,7 @@ import { Verification } from './users/entity/verification.entity';
 import { SlidesModule } from './slides/slides.module';
 import { CategoriesModule } from './categories/categories.module';
 import { MerchandiseModule } from './merchandise/merchandise.module';
+import { CartModule } from './cart/cart.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { MerchandiseModule } from './merchandise/merchandise.module';
     SlidesModule,
     CategoriesModule,
     MerchandiseModule,
+    CartModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,4 +1,5 @@
-import { MerchandiseItem, list } from "./merchandise";
+import { Axios } from ".";
+import { MerchandiseItem } from "./merchandise";
 
 interface Store {
   id: number;
@@ -16,16 +17,7 @@ export interface GetCart {
 }
 
 export async function getCart(): Promise<GetCart[]> {
-  return [
-    {
-      id: 1,
-      store: {
-        id: 1,
-        name: "abc",
-      },
-      merchandises: list.slice(0, 3).map((item) => ({ ...item, quantity: 1 })),
-    },
-  ];
+  return Axios.get("/cart");
 }
 
 interface PostCart {
@@ -34,11 +26,11 @@ interface PostCart {
 }
 
 export async function postCart(cart: PostCart) {
-  console.log("post");
+  return Axios.post("/cart", cart);
 }
 
 export async function deleteCart(id: number | number[]) {
-  console.log("delete");
+  return Axios.delete(`/cart/${id}`);
 }
 
 export async function patchCart({
@@ -48,5 +40,5 @@ export async function patchCart({
   id: number;
   quantity: number;
 }) {
-  console.log("patch");
+  return Axios.patch(`/cart/${id}`, quantity);
 }

@@ -1,6 +1,14 @@
+import axios from "axios";
 import { FormEvent } from "react";
 
 export const HOST = "http://localhost:3003";
+
+export const Axios = axios.create({
+  baseURL: HOST,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
 
 class APIError extends Error {
   constructor(message: string) {
