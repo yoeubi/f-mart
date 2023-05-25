@@ -1,4 +1,4 @@
-import { get } from ".";
+import { Axios } from ".";
 
 export interface Category {
   id: number;
@@ -7,5 +7,5 @@ export interface Category {
 }
 
 export function getCategories() {
-  return get("/categories");
+  return Axios.get("/categories");
 }

@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { ReactElement, useState } from "react";
+import { ReactElement, useMemo, useState } from "react";
 import Button from "../components/Button";
 import CartItem from "../components/CartItem";
 import Checkbox from "../components/Checkbox";
@@ -7,7 +7,13 @@ import Layout from "../components/Layout";
 import { GetServerSideProps } from "next";
 import { Cart, GetCart, deleteCart, getCart } from "../apis/cart";
 import { NextPageWithLayout } from "./_app";
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import {
+  QueryClient,
+  dehydrate,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "react-query";
 import { postOrder } from "../apis/order";
 
 const PureTitle = styled.div`
@@ -69,20 +75,23 @@ interface Props {
   cart: GetCart[];
 }
 
-const Cart: NextPageWithLayout<Props> = ({ cart }) => {
+const Cart: NextPageWithLayout<Props> = () => {
   const queryClient = useQueryClient();
-  const { data } = useQuery("cart", getCart, {
-    initialData: cart,
-  });
+  const { data } = useQuery("cart", getCart);
   const [checkedIds, setCheckIds] = useState(new Set<number>());
 
-  const items: Cart[] = [];
-  for (const item of cart) {
-    const checkedCart = item.merchandises.filter((merchan) =>
-      checkedIds.has(merchan.id)
-    );
-    items.push(...checkedCart);
-  }
+  const items = useMemo(() => {
+    if (!data) return [];
+    const items = [];
+    for (const item of data) {
+      const checkedCart = item.merchandises.filter((merchan) =>
+        checkedIds.has(merchan.id)
+      );
+      items.push(...checkedCart);
+    }
+    return items;
+  }, [data]);
+
   const count = checkedIds.size;
   const total = items.reduce((pre, cur) => {
     return pre + cur.price * cur.quantity;
@@ -189,10 +198,14 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   //     },
   //   };
   // }
-  const cart = await getCart();
+
+  const queryClient = new QueryClient();
+
+  await queryClient.prefetchQuery("cart", getCart);
+
   return {
     props: {
-      cart,
+      dehydratedState: dehydrate(queryClient),
     },
   };
 };

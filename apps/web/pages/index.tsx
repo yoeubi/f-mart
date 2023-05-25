@@ -42,9 +42,11 @@ Web.getLayout = function getLayout(page: ReactElement) {
 };
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const list = await getMerchandises();
-  const slides = await getSlides();
-  const categories = await getCategories();
+  const [list, slides, categories] = await Promise.all([
+    getMerchandises(),
+    getSlides(),
+    getCategories(),
+  ]);
   return {
     props: {
       list,

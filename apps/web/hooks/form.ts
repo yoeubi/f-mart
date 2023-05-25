@@ -1,17 +1,14 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 
 export function useFormState<T>(
   defaultValue: T,
   validate: (value: T) => boolean
 ): [T, (value: T) => void, boolean] {
-  const isMounted = useRef(false);
   const [state, setState] = useState<T>(defaultValue);
+  const [error, setError] = useState(false);
   const onChange = (value: T) => {
-    if (!isMounted.current) {
-      isMounted.current = true;
-    }
+    setError(validate(state));
     setState(value);
   };
-  const error = isMounted.current && validate(state);
   return [state, onChange, error];
 }

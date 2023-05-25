@@ -1,4 +1,4 @@
-import { get } from ".";
+import { Axios, get } from ".";
 
 export interface MerchandiseItem {
   id: number;
@@ -16,9 +16,9 @@ export interface Merchandise {
 }
 
 export async function getMerchandises(): Promise<Merchandise[]> {
-  return get("/merchandise");
+  return Axios.get("/merchandise");
 }
 
 export async function getMerchandiseItem(id: number): Promise<MerchandiseItem> {
-  return get(`/merchandise/${id}`);
+  return Axios.get(`/merchandise/${id}`);
 }

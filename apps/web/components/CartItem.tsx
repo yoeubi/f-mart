@@ -5,6 +5,7 @@ import Checkbox from "./Checkbox";
 import Quantity from "./Quantity";
 import { GetCart, patchCart } from "../apis/cart";
 import { useMutation, useQueryClient } from "react-query";
+import { useMutateCart } from "../hooks/useMudateCart";
 
 const PureCart = styled.li`
   display: flex;
@@ -80,22 +81,9 @@ const CartItem: FC<CartItemProps> = ({
   onCheckAll,
   onDelete,
 }) => {
-  const ids = merchandises.reduce<number[]>((pre, cur) => {
-    return pre.concat(cur.id);
-  }, []);
+  const ids = merchandises.map(({ id }) => id);
   const queryClient = useQueryClient();
-  const mutation = useMutation({
-    mutationFn: patchCart,
-    onSuccess: () => {
-      queryClient.invalidateQueries("cart");
-    },
-  });
-  const onIncrease = (id: number, quantity: number) => {
-    mutation.mutate({ id, quantity });
-  };
-  const onDecrease = (id: number, quantity: number) => {
-    mutation.mutate({ id, quantity });
-  };
+  const { onChangeQuantity } = useMutateCart();
   const isAllChecked = merchandises.every((item) => checkedIds.has(item.id));
   return (
     <PureCart>
@@ -120,8 +108,12 @@ const CartItem: FC<CartItemProps> = ({
                 <div>{item.name}</div>
                 <Quantity
                   quantity={item.quantity}
-                  onIncrease={() => onIncrease(item.id, item.quantity + 1)}
-                  onDecrease={() => onDecrease(item.id, item.quantity - 1)}
+                  onIncrease={() =>
+                    onChangeQuantity(item.id, item.quantity + 1)
+                  }
+                  onDecrease={() =>
+                    onChangeQuantity(item.id, item.quantity - 1)
+                  }
                 />
                 <div>{item.price * item.quantity}원</div>
                 <Button
