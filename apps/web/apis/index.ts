@@ -1,6 +1,14 @@
+import axios from "axios";
 import { FormEvent } from "react";
 
 export const HOST = "http://localhost:3003";
+
+export const Axios = axios.create({
+  baseURL: HOST,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
 
 class APIError extends Error {
   constructor(message: string) {
@@ -33,4 +41,18 @@ export function getFormData(e: FormEvent<HTMLFormElement>) {
     data[key] = value;
   }
   return data;
+}
+
+export async function get<T>(url: string) {
+  const response = await fetch(`${HOST}${url}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  if (!response.ok) {
+    const message = await response.text();
+    throw new APIError(message);
+  }
+  return response.json();
 }

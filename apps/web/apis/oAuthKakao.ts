@@ -1,4 +1,4 @@
-import { HOST, post } from ".";
+import { Axios, HOST, post } from ".";
 
 const CLIENT_ID = "871c4edc1c6d18ca4d2eedce73eaf16f";
 const REDIRECT_URI = "http://localhost:3000/oauth/kakao";
@@ -15,19 +15,15 @@ interface KakaoToken {
 }
 
 export async function getTokenByKakao(code: string) {
-  console.log("client run");
-
   const formData = new URLSearchParams();
   formData.append("code", code);
   formData.append("grant_type", "authorization_code");
   formData.append("redirect_uri", REDIRECT_URI);
   formData.append("client_id", CLIENT_ID);
-  const response = await fetch(KAKAO_TOKEN_URL, {
-    method: "POST",
+  const response = await Axios.post(KAKAO_TOKEN_URL, formData, {
     headers: {
       "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
     },
-    body: formData,
   });
   const token = (await response.json()) as KakaoToken;
   return token;
@@ -36,7 +32,7 @@ export async function getTokenByKakao(code: string) {
 export async function signInByKakao(
   kakaoAccessToken: string
 ): Promise<{ accessToken: string; refreshToken: string }> {
-  const response = await fetch(HOST + "/oauth/kakao", {
+  const response = await Axios.post(HOST + "/oauth/kakao", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -48,3 +44,31 @@ export async function signInByKakao(
   const refreshToken = response.headers.get("refresh_token") || "";
   return { accessToken, refreshToken };
 }
+/* 
+  벌크 데이터 입력
+  SEED, sql insert 
+  파일 불러오는 형식
+
+  csv import 
+
+  web 크롤링
+  스크립트를 작성하여 
+  API를 반복하여 호출할수 있는 방법이 있다.
+
+  데이터를 방식 복잡해서 API를 반복호출
+
+  mysql csv import 
+
+  axios 는 자동 타입을 추론해서 헤더를 넣어주지 않는다 
+
+  최대한 간단한 방법을 먼저 사용을 하고 
+  안됐을때 어드벤스트한 데이터 스트럭쳐를 사용하는게 좋다
+  배열이나 객체를 사용하는데 
+  그걸로 해결곤란하면 셋, 맵을 사용하면 좋다
+
+  특수한 상황에 쓰이는 것
+  중복 회피하고 싶을땐 체크아이디를 배열로 두고 온체크 쪽에서 셋해서 중복을 제거해서 다시 넣어주는 것으로 하지 않을까 싶다
+
+
+  
+*/

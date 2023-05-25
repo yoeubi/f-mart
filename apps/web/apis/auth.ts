@@ -1,4 +1,4 @@
-import { post } from ".";
+import { Axios, post } from ".";
 
 export interface SignIn {
   email: string;
@@ -8,7 +8,7 @@ export interface SignIn {
 export function fetchSignIn(
   data: SignIn
 ): Promise<{ accessToken: string; refreshToken: string }> {
-  return post("/signin", data);
+  return Axios.post("/signin", data);
 }
 
 export interface SignUp {
@@ -17,5 +17,5 @@ export interface SignUp {
 }
 
 export function fetchSignUp(data: SignUp): Promise<{ code: string }> {
-  return post("/signup", data);
+  return Axios.post("/signup", data);
 }

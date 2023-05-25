@@ -3,6 +3,8 @@ import { FC } from "react";
 import Button from "./Button";
 import Checkbox from "./Checkbox";
 import Quantity from "./Quantity";
+import { GetCart } from "../apis/cart";
+import { useMutateCart } from "../hooks/useMudateCart";
 
 const PureCart = styled.li`
   display: flex;
@@ -63,44 +65,67 @@ const PureList = styled.ul`
   gap: 20px;
 `;
 
-export interface MerchandiseItem {
-  id: number;
-  name: string;
-  thumbnail: string;
-  price: number;
+interface CartItemProps extends GetCart {
+  checkedIds: number[];
+  onCheck: (id: number) => void;
+  onCheckAll: (ids: number[]) => void;
+  onDelete: (id: number) => void;
 }
 
-export interface CartItemProps {
-  storeName: string;
-  merchandises: MerchandiseItem[];
-}
-
-const CartItem: FC<CartItemProps> = ({ storeName, merchandises }) => {
+const CartItem: FC<CartItemProps> = ({
+  store,
+  merchandises,
+  checkedIds,
+  onCheck,
+  onCheckAll,
+  onDelete,
+}) => {
+  const ids = merchandises.map(({ id }) => id);
+  const { onChangeQuantity } = useMutateCart();
+  const isAllChecked = merchandises.every((item) =>
+    checkedIds.includes(item.id)
+  );
   return (
     <PureCart>
       <PureCartTitle>
-        <WhiteColorCheckbox>{storeName}</WhiteColorCheckbox>
+        <WhiteColorCheckbox
+          checked={isAllChecked}
+          onChange={() => onCheckAll(ids)}
+        >
+          {store.name}
+        </WhiteColorCheckbox>
       </PureCartTitle>
       <PureList>
         {merchandises.map((item) => (
           <li key={item.id}>
             <PureItem>
               <PureMerchandise>
-                <Checkbox />
+                <Checkbox
+                  checked={checkedIds.includes(item.id)}
+                  onChange={() => onCheck(item.id)}
+                />
                 <PureImg src={item.thumbnail} alt={item.name} />
                 <div>{item.name}</div>
                 <Quantity
-                  quantity={quantity}
-                  onIncrease={onIncrease}
-                  onDecrease={onDecrease}
+                  quantity={item.quantity}
+                  onIncrease={() =>
+                    onChangeQuantity(item.id, item.quantity + 1)
+                  }
+                  onDecrease={() =>
+                    onChangeQuantity(item.id, item.quantity - 1)
+                  }
                 />
-                <div>378000원</div>
-                <Button variant="secondary" size="md">
+                <div>{item.price * item.quantity}원</div>
+                <Button
+                  variant="secondary"
+                  size="md"
+                  onClick={() => onDelete(item.id)}
+                >
                   X
                 </Button>
               </PureMerchandise>
             </PureItem>
-            <PureText>상품 금액 = 398000원</PureText>
+            <PureText>상품 금액 = {item.price * item.quantity}원</PureText>
           </li>
         ))}
       </PureList>

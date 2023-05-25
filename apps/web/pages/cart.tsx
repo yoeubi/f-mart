@@ -1,11 +1,20 @@
-import { css } from "@emotion/react";
 import styled from "@emotion/styled";
-import { ReactElement, useState } from "react";
+import { ReactElement, useMemo, useState } from "react";
 import Button from "../components/Button";
-import CartItem, { CartItemProps } from "../components/CartItem";
+import CartItem from "../components/CartItem";
 import Checkbox from "../components/Checkbox";
 import Layout from "../components/Layout";
-import Quantity from "../components/Quantity";
+import { GetServerSideProps } from "next";
+import { Cart, GetCart, deleteCart, getCart } from "../apis/cart";
+import { NextPageWithLayout } from "./_app";
+import {
+  QueryClient,
+  dehydrate,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "react-query";
+import { postOrder } from "../apis/order";
 
 const PureTitle = styled.div`
   font-size: 24px;
@@ -62,21 +71,75 @@ const PureControl = styled.div`
   height: 52px;
 `;
 
-const Cart = () => {
-  const list: CartItemProps[] = [
-    {
-      storeName: "한국 쥬맥스",
-      merchandises: [
-        {
-          id: 1,
-          name: "망고 주스",
-          thumbnail:
-            "https://cdn-mart.baemin.com/sellergoods/thumbnail/dec0442b-d088-400c-80f3-40e79e4344cc.png?h=200&w=200",
-          price: 3000,
-        },
-      ],
+interface Props {
+  cart: GetCart[];
+}
+
+const Cart: NextPageWithLayout<Props> = () => {
+  const queryClient = useQueryClient();
+  const { data } = useQuery("cart", getCart);
+  const [checkedIds, setCheckIds] = useState<number[]>([]);
+
+  const items = useMemo(() => {
+    if (!data) return [];
+    const items = [];
+    for (const item of data) {
+      const checkedCart = item.merchandises.filter((merchan) =>
+        checkedIds.includes(merchan.id)
+      );
+      items.push(...checkedCart);
+    }
+    return items;
+  }, [data]);
+
+  const count = checkedIds.length;
+  const total = items.reduce((pre, cur) => {
+    return pre + cur.price * cur.quantity;
+  }, 0);
+
+  const mutationCart = useMutation({
+    mutationFn: deleteCart,
+    onSuccess() {
+      queryClient.invalidateQueries("cart");
     },
-  ];
+  });
+  const mutationOrder = useMutation({
+    mutationFn: postOrder,
+    onSuccess() {
+      queryClient.invalidateQueries("order");
+    },
+  });
+
+  const onDelete = (id: number) => {
+    mutationCart.mutate(id);
+  };
+  const onDeleteAll = () => {
+    mutationCart.mutate([...checkedIds]);
+  };
+  const onSubmit = () => {
+    mutationOrder.mutate(items);
+  };
+
+  const onCheck = (id: number) => {
+    setCheckIds((pre) => {
+      const result = new Set(pre);
+      result.has(id) ? result.delete(id) : result.add(id);
+      return [...result];
+    });
+  };
+  const onCheckAll = (ids: number[]) => {
+    setCheckIds((pre) => {
+      const alreadyChecked = ids.every((id) => pre.includes(id));
+      if (alreadyChecked) {
+        return [];
+      }
+      const result = new Set(pre.concat(ids));
+      return [...result];
+    });
+  };
+
+  if (!data) return null;
+
   return (
     <div>
       <PureTitle>장바구니</PureTitle>
@@ -84,19 +147,30 @@ const Cart = () => {
         <PureMain>
           <PureControl>
             <Checkbox>선택 해제</Checkbox>
-            <Button variant="secondary" size="md">
+            <Button variant="secondary" size="md" onClick={onDeleteAll}>
               선택 삭제
             </Button>
           </PureControl>
           <PureList>
-            {list.map((item) => (
-              <CartItem key={item.storeName} {...item} />
+            {data.map((item) => (
+              <CartItem
+                key={item.id}
+                id={item.id}
+                store={item.store}
+                merchandises={item.merchandises}
+                checkedIds={checkedIds}
+                onCheck={onCheck}
+                onCheckAll={onCheckAll}
+                onDelete={onDelete}
+              />
             ))}
           </PureList>
         </PureMain>
         <PureOrder>
-          <div>예상 주문금액 0원</div>
-          <FullSizeButton>총 2건 주문하기</FullSizeButton>
+          <div>예상 주문금액 {total}원</div>
+          <FullSizeButton onClick={onSubmit}>
+            총 {count}건 주문하기
+          </FullSizeButton>
         </PureOrder>
       </PureFlex>
     </div>
@@ -105,6 +179,30 @@ const Cart = () => {
 
 Cart.getLayout = function getLayout(page: ReactElement) {
   return <Layout>{page}</Layout>;
+};
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  // const { req } = ctx;
+  // const { access_token: accessToken } = req.cookies;
+
+  // if (!accessToken) {
+  //   return {
+  //     redirect: {
+  //       destination: "/",
+  //       permanent: false,
+  //     },
+  //   };
+  // }
+
+  const queryClient = new QueryClient();
+
+  await queryClient.prefetchQuery("cart", getCart);
+
+  return {
+    props: {
+      dehydratedState: dehydrate(queryClient),
+    },
+  };
 };
 
 export default Cart;

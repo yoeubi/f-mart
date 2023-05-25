@@ -1,26 +1,39 @@
-import { FormEvent, ReactElement, useState } from "react";
-import { getFormData } from "../apis";
-import { fetchSignUp, SignUp } from "../apis/auth";
+import { FormEvent, useState } from "react";
+import { fetchSignUp } from "../apis/auth";
 import Button from "../components/Button";
 import Center from "../components/Center";
 import Form from "../components/Form";
 import Input from "../components/Input";
-import Layout from "../components/Layout";
 import Title from "../components/Title";
-import { NextPageWithLayout } from "./_app";
+import styled from "@emotion/styled";
+import { useFormState } from "../hooks/form";
+import { css } from "@emotion/react";
+import { useRouter } from "next/router";
 
-const SignUp: NextPageWithLayout = () => {
+const FullSizeButton = styled(Button)`
+  width: 100%;
+  margin-top: 50px;
+`;
+
+const SignUp = () => {
+  const router = useRouter();
   const [isSignUp, setIsSignUp] = useState(false);
-  const onSubmit = async (
-    e: FormEvent<HTMLFormElement> & {
-      target: {
-        email: HTMLInputElement;
-        password: HTMLInputElement;
-      };
+  const [code, onChangeCode, codeError] = useFormState("", (value) => !value);
+  const [email, onChangEmail, emailError] = useFormState("", (value) => !value);
+  const [password, onChangePassword, passwordError] = useFormState(
+    "",
+    (value) => !value
+  );
+
+  const onSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    if (emailError || passwordError) return;
+    if (!isSignUp) {
+      await fetchSignUp({ email, password });
+      setIsSignUp(true);
+    } else {
+      router.replace("/");
     }
-  ) => {
-    await fetchSignUp(getFormData(e) as unknown as SignUp);
-    setIsSignUp(true);
   };
 
   return (
@@ -31,26 +44,37 @@ const SignUp: NextPageWithLayout = () => {
             <Title>코드 확인</Title>
             <Input
               placeholder="코드"
-              message={{ error: "코드를 입력해주세요." }}
+              value={code}
+              onChange={(e) => onChangeCode(e.target.value)}
+              error={codeError}
+              errorText={"코드를 입력해주세요."}
             />
-            <Button style={{ marginTop: "50px" }}>코드 확인</Button>
+            <FullSizeButton>코드 확인</FullSizeButton>
           </>
         ) : (
           <>
             <Title>회원가입</Title>
             <Input
               name="email"
-              placeholder="아이디"
-              message={{ error: "아이디를 입력해주세요." }}
+              placeholder="email"
+              value={email}
+              onChange={(e) => onChangEmail(e.target.value)}
+              error={emailError}
+              errorText="이메일을 입력해주세요."
             />
             <Input
               name="password"
               type="password"
               placeholder="비밀번호"
-              message={{ error: "비밀번호를 입력해주세요." }}
-              style={{ marginTop: "14px" }}
+              value={password}
+              onChange={(e) => onChangePassword(e.target.value)}
+              error={passwordError}
+              errorText="비밀번호를 입력해주세요."
+              css={css`
+                margin-top: 14px;
+              `}
             />
-            <Button style={{ marginTop: "50px" }}>회원가입</Button>
+            <FullSizeButton>회원가입</FullSizeButton>
           </>
         )}
       </Form>

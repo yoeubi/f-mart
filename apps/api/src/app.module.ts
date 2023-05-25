@@ -9,6 +9,10 @@ import { User } from './users/entity/user.entity';
 import { ConfigModule } from '@nestjs/config';
 import { RefreshToken } from './users/entity/refreshToken.entity';
 import { Verification } from './users/entity/verification.entity';
+import { SlidesModule } from './slides/slides.module';
+import { CategoriesModule } from './categories/categories.module';
+import { MerchandiseModule } from './merchandise/merchandise.module';
+import { CartModule } from './cart/cart.module';
 
 @Module({
   imports: [
@@ -30,6 +34,10 @@ import { Verification } from './users/entity/verification.entity';
     OauthModule,
     ConfigModule.forRoot(),
     AuthModule,
+    SlidesModule,
+    CategoriesModule,
+    MerchandiseModule,
+    CartModule,
   ],
   controllers: [AppController],
   providers: [AppService],
