@@ -78,21 +78,21 @@ interface Props {
 const Cart: NextPageWithLayout<Props> = () => {
   const queryClient = useQueryClient();
   const { data } = useQuery("cart", getCart);
-  const [checkedIds, setCheckIds] = useState(new Set<number>());
+  const [checkedIds, setCheckIds] = useState<number[]>([]);
 
   const items = useMemo(() => {
     if (!data) return [];
     const items = [];
     for (const item of data) {
       const checkedCart = item.merchandises.filter((merchan) =>
-        checkedIds.has(merchan.id)
+        checkedIds.includes(merchan.id)
       );
       items.push(...checkedCart);
     }
     return items;
   }, [data]);
 
-  const count = checkedIds.size;
+  const count = checkedIds.length;
   const total = items.reduce((pre, cur) => {
     return pre + cur.price * cur.quantity;
   }, 0);
@@ -122,24 +122,19 @@ const Cart: NextPageWithLayout<Props> = () => {
 
   const onCheck = (id: number) => {
     setCheckIds((pre) => {
-      if (pre.has(id)) {
-        pre.delete(id);
-      } else {
-        pre.add(id);
-      }
-      return new Set(pre);
+      const result = new Set(pre);
+      result.has(id) ? result.delete(id) : result.add(id);
+      return [...result];
     });
   };
   const onCheckAll = (ids: number[]) => {
     setCheckIds((pre) => {
-      const alreadyChecked = ids.every((id) => pre.has(id));
+      const alreadyChecked = ids.every((id) => pre.includes(id));
       if (alreadyChecked) {
-        ids.forEach((id) => pre.delete(id));
-      } else {
-        ids.forEach((id) => pre.add(id));
+        return [];
       }
-
-      return new Set(pre.keys());
+      const result = new Set(pre.concat(ids));
+      return [...result];
     });
   };
 

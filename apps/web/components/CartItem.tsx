@@ -3,8 +3,7 @@ import { FC } from "react";
 import Button from "./Button";
 import Checkbox from "./Checkbox";
 import Quantity from "./Quantity";
-import { GetCart, patchCart } from "../apis/cart";
-import { useMutation, useQueryClient } from "react-query";
+import { GetCart } from "../apis/cart";
 import { useMutateCart } from "../hooks/useMudateCart";
 
 const PureCart = styled.li`
@@ -67,7 +66,7 @@ const PureList = styled.ul`
 `;
 
 interface CartItemProps extends GetCart {
-  checkedIds: Set<number>;
+  checkedIds: number[];
   onCheck: (id: number) => void;
   onCheckAll: (ids: number[]) => void;
   onDelete: (id: number) => void;
@@ -82,9 +81,10 @@ const CartItem: FC<CartItemProps> = ({
   onDelete,
 }) => {
   const ids = merchandises.map(({ id }) => id);
-  const queryClient = useQueryClient();
   const { onChangeQuantity } = useMutateCart();
-  const isAllChecked = merchandises.every((item) => checkedIds.has(item.id));
+  const isAllChecked = merchandises.every((item) =>
+    checkedIds.includes(item.id)
+  );
   return (
     <PureCart>
       <PureCartTitle>
@@ -101,7 +101,7 @@ const CartItem: FC<CartItemProps> = ({
             <PureItem>
               <PureMerchandise>
                 <Checkbox
-                  checked={checkedIds.has(item.id)}
+                  checked={checkedIds.includes(item.id)}
                   onChange={() => onCheck(item.id)}
                 />
                 <PureImg src={item.thumbnail} alt={item.name} />
